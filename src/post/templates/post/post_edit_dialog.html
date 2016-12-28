@@ -1,0 +1,35 @@
+{#{% if form.errors %}#}
+{#    <div id="form-error">#}
+{#        <p>The operation could not be performed because one or more error(s) occurred.<br/>Please resubmit the form#}
+{#            after making the following changes:</p>#}
+{#        <ul>#}
+{#            {% for field in form %}#}
+{#                <li>{{ field }}{{ field.errors|striptags }}</li>#}
+{#            {% endfor %}#}
+{#        </ul>#}
+{#    </div>#}
+{#{% endif %}#}
+<form method="POST" enctype="multipart/form-data" class="ajax-form" action="{% url 'post:edit_dialog' pk=post.pk %}">
+    {% csrf_token %}
+    <div>{{ form.title }}</div>
+    {% for error in form.title.errors %}
+        <b>{{ error }}</b>
+    {% endfor %}
+    <input id="id_encoded_image" maxlength="10000" name="encoded_image" type="hidden">
+    <div>
+        <canvas id="simple_sketch" width="800" height="300" class="sketch"></canvas>
+    </div>
+    <button id='submit' type="submit" class="btn btn-default">Save</button>
+
+</form>
+
+
+<script type="text/javascript">
+    $(function draw() {
+        $('#simple_sketch').sketch();
+    });
+    $(document).on('click', '#submit', function () {
+        $(document.getElementById('id_encoded_image').value = document.getElementById('simple_sketch').toDataURL())
+{#        // jquery#}
+    });
+</script>

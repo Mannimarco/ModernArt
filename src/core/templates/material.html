@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+{% load staticfiles %}
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+    <title>TITLE</title>
+    <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/mdb.min.css' %}">
+    <link rel="stylesheet" href="{% static 'css/post.css' %}">
+</head>
+<body>
+<!--Navbar-->
+<nav class="navbar navbar-dark bg-primary">
+
+    <!-- Collapse button-->
+    <button class="navbar-toggler hidden-sm-up" type="button" data-toggle="collapse" data-target="#collapseEx2">
+        <i class="fa fa-bars"></i>
+    </button>
+
+    <div class="container">
+
+        <!--Collapse content-->
+        <div class="collapse navbar-toggleable-xs" id="collapseEx2">
+            <!--Navbar Brand-->
+            <a class="navbar-brand">Navbar</a>
+            <!--Links-->
+            <ul class="nav navbar-nav">
+                {% if user.is_authenticated %}
+                    <li class="nav-item btn-group">
+                        <a class="nav-link dropdown-toggle" id="dropdownMenu1" data-toggle="dropdown"
+                           aria-haspopup="true"
+                           aria-expanded="false">{{ user.username }}</a>
+                        <div class="dropdown-menu" aria-labelledby="dropdownMenu1">
+                            <a class="dropdown-item" href="{% url 'user:user_view' pk=user.id %}">Profile</a>
+                            <a class="dropdown-item">Add post</a>
+                            <a class="dropdown-item" href="{% url 'user:logout' %}">Sign out</a>
+                        </div>
+                    </li>
+                {% else %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:login' %}">Sign in</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'user:register' %}">Sign up</a>
+                    </li>
+                {% endif %}
+
+
+            </ul>
+            <!--Search form-->
+            {#            <form class="form-inline">#}
+            {#                <input class="form-control" type="text" placeholder="Search">#}
+            {#            </form>#}
+            <form method="GET" class="form-inline">
+                <div class="sm-form form-group">
+                    {{ search_form.text }}
+                </div>
+                <div class="sm-form form-group">
+                    {{ search_form.order }}
+                </div>
+                <div class="sm-form form-group">
+                    <input class="btn btn-sm" type="submit" value="Sort"/>
+                </div>
+            </form>
+        </div>
+        <!--/.Collapse content-->
+
+    </div>
+
+</nav>
+<!--/.Navbar-->
+<div>{% block content %}{% endblock %}</div>
+
+<script type="text/javascript" src="{% static 'js/jquery-3.1.1.min.js' %}"></script>
+
+<!-- Bootstrap tooltips -->
+<script type="text/javascript" src="{% static 'js/tether.min.js' %}"></script>
+
+<!-- Bootstrap core JavaScript -->
+<script type="text/javascript" src="{% static 'js/bootstrap.min.js' %}"></script>
+
+<!-- MDB core JavaScript -->
+<script type="text/javascript" src="{% static 'js/mdb.min.js' %}"></script>
+
+<!-- Sketch script-->
+<script type="text/javascript" src={% static 'js/sketch.js' %}></script>
+
+</body>
+</html>

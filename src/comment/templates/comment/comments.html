@@ -1,0 +1,48 @@
+{% load i18n %}
+<!--Section: Comments list-->
+    <section>
+
+        <!--Main wrapper-->
+        <div class="comments-list" data-url="{% url 'post:comment:comments' pk=post.pk %}">
+            <div class="section-heading">
+                <h1>{% trans 'Comments:' %}</h1>
+            </div>
+            {% for comment in post.comments.all %}
+                <!--First row-->
+                <div class="row" style="margin-top: 20px;">
+                    <!--Image column-->
+                    <div class="col-sm-2 col-xs-12">
+                        {% if comment.author.avatar.url != null %}
+                            <img src="{{ comment.author.avatar.url }}" width="120">
+                        {% else %}
+                            {#                            <img src="{% static 'avatar.jpg' %}"> Почему блять не работает?#}
+                            <img src="https://sundanceusa.com/images/avatar.jpg" width="120">
+                        {% endif %}
+                    </div>
+                    <!--/.Image column-->
+
+                    <!--Content column-->
+                    <div class="col-sm-10 col-xs-12">
+                        <a><h3 class="user-name">{{ comment.author }}</h3></a>
+
+                        <div class="card-data">
+                            <ul>
+                                <li class="comment-date"><i class="fa fa-clock-o"></i>{{ comment.created_date }}</li>
+                            </ul>
+                        </div>
+
+                        <p class="comment-text">{{ comment.text }}</p>
+                    </div>
+                    <!--/.Content column-->
+
+                </div>
+                <!--/.First row-->
+            {% empty %}
+                <p>{% trans 'No comments' %}</p>
+            {% endfor %}
+
+        </div>
+        <!--/.Main wrapper-->
+
+    </section>
+    <!--/Section: Comments list-->

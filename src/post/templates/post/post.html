@@ -1,0 +1,81 @@
+{% extends "base.html" %}
+
+{% load i18n %}
+{% load cache %}
+
+{% block title %}
+    <div class="post-title">{{ post.title }}</div>
+{% endblock %}
+
+{% block content %}
+
+    <div class="card" style="display: inline-block; margin-top: 50px;">
+
+        <!--Card image-->
+        <a href="{% url 'post:detail' pk=post.pk %}">
+            <img class="img-fluid" src="{{ post.encoded_image }}" alt="Card image cap" width="720">
+        </a>
+        <!--/.Card image-->
+
+        <!--Card content-->
+        <div class="card-block" style="max-width: 800px;">
+            <!--Title-->
+            <h4 class="card-title"><a href="{% url 'post:detail' pk=post.pk %}">{{ post.title }}</a></h4>
+            <!--Text-->
+            <p class="card-text">
+                {% blocktrans with date=post.created_date|date:"Y - m - d H:i" %}Created  {{ date }}
+                    by{% endblocktrans %}
+                <a href="{% url 'user:user_view' pk=post.author.id %}">
+                    {{ post.author }}
+                </a>
+                <br>
+                {% trans 'Rating ' %}<span class="rating-value"
+                                           data-post-id="{{ post.id }}">{{ post.rating_value }}</span>
+            </p>
+
+            {% if user.is_authenticated %}
+                <div style="display:inline-block;">
+                    {#                        {% csrf_token %}#}
+                    <button type="submit" class="vote-up"
+                            data-url-vote-up="{% url 'post:rating:vote_up' pk=post.pk %}">
+                        {% trans 'Vote UP' %}
+                    </button>
+                    <button type="submit" class="vote-down"
+                            {#                    <button type="submit" class="btn btn-secondary btn-sm vote-down"#}
+                            data-url-vote-down="{% url 'post:rating:vote_down' pk=post.pk %}">
+                        {% trans 'Vote DOWN' %}
+                    </button>
+                </div>
+                {% if user == post.author %}
+                    {#                    <form action="{% url 'post:edit' pk=post.pk %}">#}
+                    {#                        <button type="submit" class="btn btn-primary btn-sm" id="post-edit-link">Edit</button>#}
+                    {#                    </form>#}
+                    <a href="{% url 'post:edit_dialog' pk=post.pk %}"
+                       id="post-edit-link">
+                        {% trans 'Edit' %}
+                    </a>
+
+                {% endif %}
+            {% endif %}
+        </div>
+        <!--/.Card content-->
+
+    </div>
+    <br>
+
+    <div class="post-comments">{% include 'comment/comments.html' %}</div>
+    {% if user.is_authenticated %}
+        <form action="{% url 'post:comment:new_comment' pk=post.pk %}" method="POST" style="margin-top: 50px;">
+            {% csrf_token %}
+            <div class="md-form" style="max-width: 1000px;">{{ form.text }}</div>
+            <button type="submit" class="btn btn-secondary btn-sm" width="40">{% trans 'Add comment' %}</button>
+        </form>
+    {% endif %}
+
+    <div class="bgdialog">
+        <div class="dialog">
+            Edit post
+        </div>
+    </div>
+
+{% endblock %}
